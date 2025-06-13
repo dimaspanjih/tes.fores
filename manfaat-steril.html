@@ -1,0 +1,174 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manfaat Steril - Fores Comunity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #fef9f3;
+      font-family: 'Comic Sans MS', 'Arial', sans-serif;
+      overflow-x: hidden;
+    }
+    .cat-paw {
+      background-image: url('https://via.placeholder.com/50?text=🐾');
+      background-size: cover;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+    }
+    .navbar {
+      background: linear-gradient(to right, #ffccd5, #ffe7ba);
+    }
+    .card:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+    .whatsapp-btn {
+      background-color: #25D366;
+      color: white;
+      border-radius: 50px;
+      padding: 10px 20px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .whatsapp-btn:hover {
+      background-color: #1da851;
+    }
+    #hidden-menu {
+      transition: transform 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar fixed top-0 w-full shadow-lg z-50">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold text-pink-600 flex items-center">
+        <i class="fa-solid fa-cat mr-2"></i> Fores Comunity
+      </a>
+      <div class="flex items-center space-x-4">
+        <div class="space-x-4 hidden md:flex">
+          <a href="index.html#home" class="text-pink-800 hover:text-orange-500">Home</a>
+          <a href="index.html#visi-misi" class="text-pink-800 hover:text-orange-500">Visi & Misi</a>
+          <a href="index.html#vip" class="text-pink-800 hover:text-orange-500">Member VIP</a>
+        </div>
+        <button class="text-pink-800" onclick="toggleMenu()">
+          <i class="fa-solid fa-paw text-2xl"></i>
+        </button>
+      </div>
+    </div>
+    <div id="hidden-menu" class="hidden fixed top-0 right-0 h-full w-64 bg-pink-100 shadow-lg transform translate-x-full md:hidden">
+      <div class="flex justify-end p-4">
+        <button onclick="toggleMenu()" class="text-pink-800">
+          <i class="fa-solid fa-times text-2xl"></i>
+        </button>
+      </div>
+      <div class="flex flex-col space-y-4 px-4 py-2">
+        <a href="index.html#steril" class="text-pink-800 hover:text-orange-500">Steril</a>
+        <a href="index.html#adopsi" class="text-pink-800 hover:text-orange-500">Adopsi</a>
+        <a href="index.html#vaksin" class="text-pink-800 hover:text-orange-500">Vaksin</a>
+        <a href="index.html#grup" class="text-pink-800 hover:text-orange-500">Grup</a>
+        <a href="index.html#pengobatan" class="text-pink-800 hover:text-orange-500">Pengobatan</a>
+        <a href="index.html#rescue" class="text-pink-800 hover:text-orange-500">Rescue</a>
+        <a href="index.html#edukasi" class="text-pink-800 hover:text-orange-500">Edukasi</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Manfaat Steril Section -->
+  <section class="py-16 bg-pink-50 mt-20">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-pink-600 text-center mb-8">Manfaat Steril Kucing</h2>
+      <p class="text-lg text-gray-700 text-center mb-12">Meow! Steril bikin anabul lebih sehat dan bahagia!</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="card bg-white p-6 rounded-xl shadow-lg text-center">
+          <img src="https://images.unsplash.com/photo-1519052537078-e630b1ddf4ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150" class="w-32 h-32 mx-auto rounded-full mb-4">
+          <h3 class="text-xl font-bold text-pink-600">Kesehatan Anabul</h3>
+          <p class="text-gray-600">Mengurangi risiko kanker dan infeksi pada kucing!</p>
+        </div>
+        <div class="card bg-white p-6 rounded-xl shadow-lg text-center">
+          <img src="https://images.unsplash.com/photo-1574158622682-e40e6ea97e45?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150" class="w-32 h-32 mx-auto rounded-full mb-4">
+          <h3 class="text-xl font-bold text-pink-600">Perilaku Lebih Baik</h3>
+          <p class="text-gray-600">Kucing jadi lebih tenang dan nggak suka kabur!</p>
+        </div>
+        <div class="card bg-white p-6 rounded-xl shadow-lg text-center">
+          <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150" class="w-32 h-32 mx-auto rounded-full mb-4">
+          <h3 class="text-xl font-bold text-pink-600">Cegah Overpopulasi</h3>
+          <p class="text-gray-600">Bantu kurangi kucing terlantar di jalanan!</p>
+        </div>
+        <div class="card bg-white p-6 rounded-xl shadow-lg text-center">
+          <img src="https://images.unsplash.com/photo-1494256997604-aae02c483e33?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150" class="w-32 h-32 mx-auto rounded-full mb-4">
+          <h3 class="text-xl font-bold text-pink-600">Umur Lebih Panjang</h3>
+          <p class="text-gray-600">Anabul bisa hidup lebih lama dan sehat!</p>
+        </div>
+      </div>
+      <div class="text-center mt-8">
+        <a href="index.html#vip" class="whatsapp-btn">
+          <i class="fa-brands fa-whatsapp mr-2"></i> Daftar Steril Sekarang!
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-pink-600 text-white py-8">
+    <div class="container mx-auto px-4 text-center">
+      <p>© 2025 Fores Comunity. Meow with Love!</p>
+      <div class="mt-4 flex justify-center space-x-4">
+        <a href="#" class="text-white hover:text-orange-300"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="text-white hover:text-orange-300"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('hidden-menu');
+      menu.classList.toggle('hidden');
+      menu.classList.toggle('translate-x-full');
+    }
+  </script>
+</body>
+</html>
